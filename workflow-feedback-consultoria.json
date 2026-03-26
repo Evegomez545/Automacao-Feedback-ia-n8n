@@ -1,0 +1,428 @@
+{
+  "name": "Curso YT Automação Feedback Consultoria Marketing - Aula 3",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d849b4a3-1413-4612-994d-a063bb074c38",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1OTSDJ301ZwzyKQBz2u7LXB4pzvQJ1mlKRg-eRWGyS1U",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1373717666,
+          "mode": "list",
+          "cachedResultName": "Respostas ao formulário 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OTSDJ301ZwzyKQBz2u7LXB4pzvQJ1mlKRg-eRWGyS1U/edit#gid=1373717666"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "c07554a3-6b1d-4790-98c9-6e4c1eae04af",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KfkyV7LjC3qZHMcn",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "average",
+              "field": "Em uma escala de 1 a 10, quão satisfeito(a) você ficou com a experiência geral da consultoria de hoje?"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        48
+      ],
+      "id": "99f14eb7-6517-43c2-b832-0fb01e7a17f9",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f2404776-6dd1-43c9-a204-5016360feba5",
+              "leftValue": "={{ $json['average_Em_uma_escala_de_1_a_10,_quão_satisfeito(a)_você_ficou_com_a_experiência_geral_da_consultoria_de_hoje?'] }}",
+              "rightValue": 7,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "a1e6b87d-7553-463d-be39-fc2db4ab664c",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        320
+      ],
+      "id": "bf16f9dc-ff33-47c3-9f80-0aa9ad5724de",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "sendTo": "evygomez56@gmail.com",
+        "subject": "=Atenção! média de hoje abaixo de 7 nota: {{ $('Summarize').item.json['average_Em_uma_escala_de_1_a_10,_quão_satisfeito(a)_você_ficou_com_a_experiência_geral_da_consultoria_de_hoje?'] }}",
+        "message": "={{ $('AI Agent').item.json.output }}",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1712,
+        -112
+      ],
+      "id": "ab468353-b3df-4ad2-ba6c-0f688da09926",
+      "name": "Send a message",
+      "webhookId": "a7733879-0ca2-4a35-b7be-e445184eb4ad",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dIpGBslTr6TjITDv",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1OTSDJ301ZwzyKQBz2u7LXB4pzvQJ1mlKRg-eRWGyS1U",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1373717666,
+          "mode": "list",
+          "cachedResultName": "Respostas ao formulário 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OTSDJ301ZwzyKQBz2u7LXB4pzvQJ1mlKRg-eRWGyS1U/edit#gid=1373717666"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        -112
+      ],
+      "id": "c823a9e9-20e0-443b-94bc-44a1945f685d",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KfkyV7LjC3qZHMcn",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        -112
+      ],
+      "id": "4b7b5382-9576-4330-852b-88b082192c37",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['concatenated_Se_houver,_quais_são_as_sugestões_de_melhoria_para_futuras_consultorias?'] }}",
+        "options": {
+          "systemMessage": "Você é um Supervisor de Qualidade analisando o desempenho de um consultor de marketing.\nO objetivo é escrever um e-mail de feedback construtivo, pois a média de satisfação do dia ficou abaixo da meta (Nota < 7).\n\nENTRADA:\nVocê receberá um texto contendo todas as respostas dos clientes à pergunta \"Sugestões de melhoria\", concatenadas.\nPode haver desde zero até dezenas de comentários.\n\nINSTRUÇÕES DE ANÁLISE:\n1. Sintetize os feedbacks: Não liste cada comentário individualmente. Se houver 10 comentários sobre \"atraso\", agrupe em um único ponto de atenção.\n2. Identifique os temas principais: Foque nos padrões (ex: clareza, pontualidade, empatia, domínio técnico).\n3. Se a lista estiver vazia ou com textos irrelevantes (ex: \"não\", \"ok\"), assuma que faltou conexão com o cliente e oriente sobre proatividade.\n4. O tom deve ser profissional, direto e focado em solução (mentoria), não em punição.\n\nFORMATO DE SAÍDA:\nRetorne APENAS o código HTML do corpo do e-mail (sem tags <html>, <head> ou ```).\nUse a seguinte estrutura de tags para organizar o texto:\n- <p> para parágrafos.\n- <b> para destaques importantes.\n- <ul> e <li> para listar os principais pontos de melhoria identificados.\n\nEstrutura do conteúdo:\n1. Saudação e contexto sobre a nota do dia estar abaixo da meta.\n2. Resumo geral do sentimento dos clientes (uma visão macro baseada no que leu).\n3. Lista com os principais pontos de fricção ou melhoria citados (agrupados por tema).\n4. Dê recomendações práticas e acionáveis para as próximas consultorias.\n5. Encerramento\n\nTente ajudar ao máximo nas análises de forma prática para a tomada de ação visando a melhoria do consultor.\n\nObservações:\n\nNão use nomes genéricos como [NOME DO CONSULTOR]. Deixe o e-mail sem nome\nComente que está em anexo a planilha com todos os comentários e avaliações das consultorias do dia de hoje\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1152,
+        -112
+      ],
+      "id": "6faf7b7e-b3b1-496c-ab95-c524927d14a1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "Se houver, quais são as sugestões de melhoria para futuras consultorias?",
+              "separateBy": "other",
+              "customSeparator": "; \n\nPROXIMO FEEDBACK:\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        1008,
+        -112
+      ],
+      "id": "0dbddc33-55b2-4005-9933-6e85d1e8e9d9",
+      "name": "Summarize1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        816,
+        -128
+      ],
+      "id": "0501e703-2bbe-481e-b3cf-bd909e1296b6",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        112
+      ],
+      "id": "6c2a1fa6-e9b7-40ed-83c3-04ba7ee4efa1",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "m4SFFeWXirqAEYvz",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json['concatenated_Se_houver,_quais_são_as_sugestões_de_melhoria_para_futuras_consultorias?'] }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1264,
+        112
+      ],
+      "id": "1c867a49-631f-4ce5-a239-a0fe5992c493",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Summarize": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Summarize1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fb6698cb-a267-4388-8100-f643761ad2c2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b460b8a3b1ea43572a157674cace2a06953ddbaad5de59236c45f03b279b80b7"
+  },
+  "id": "qR2MBKWfonG1zqfq",
+  "tags": []
+}
