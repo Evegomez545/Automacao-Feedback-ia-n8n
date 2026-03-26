@@ -1,4 +1,4 @@
-🤖 Agente de IA para Monitoramento de Qualidade (n8n + Gemini)
+# 🤖 Agente de IA para Monitoramento de Qualidade (n8n + Gemini)
 Este repositório contém o workflow de uma automação inteligente desenvolvida no n8n. O sistema atua como um "Supervisor de Qualidade Virtual", analisando feedbacks de consultoria e agindo proativamente quando a satisfação do cliente fica abaixo da meta.
 
 🚀 Como Funciona o Fluxo
